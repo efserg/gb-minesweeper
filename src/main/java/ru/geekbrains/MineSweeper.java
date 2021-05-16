@@ -4,6 +4,16 @@ import java.util.Random;
 
 public class MineSweeper {
 
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_BLACK = "\u001B[30m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+    public static final String ANSI_WHITE = "\u001B[37m";
+
     private static final int WIDTH = 10;
     private static final int HEIGHT = 10;
     private static final int MINES = 25;
@@ -33,6 +43,8 @@ public class MineSweeper {
         for (int i = 0; i < HEIGHT; i++) {
             System.out.printf("%3d", i);
             for (int j = 0; j < WIDTH; j++) {
+                String cellColor = getColorCode(board[i][j]);
+                System.out.print(cellColor);
                 if (board[i][j] == EMPTY) {
                     System.out.print(" .");
                 } else if (board[i][j] == MINE) {
@@ -40,9 +52,30 @@ public class MineSweeper {
                 } else {
                     System.out.printf("%2d", board[i][j]);
                 }
+                System.out.print(ANSI_RESET);
             }
             System.out.println();
         }
+    }
+
+    private static String getColorCode(final int i) {
+        switch (i) {
+            case EMPTY:
+                return ANSI_WHITE;
+            case MINE:
+                return ANSI_PURPLE;
+            case 1:
+                return ANSI_BLUE;
+            case 2:
+                return ANSI_GREEN;
+            case 3:
+                return ANSI_RED;
+            case 4:
+                return ANSI_CYAN;
+            case 5:
+                return ANSI_YELLOW;
+        }
+        return null;
     }
 
     private static int[][] generateBoard() {
