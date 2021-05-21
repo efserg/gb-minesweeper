@@ -5,15 +5,15 @@ import java.util.Scanner;
 
 public class MineSweeper {
 
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_BLACK = "\u001B[30m";
-    public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_GREEN = "\u001B[32m";
-    public static final String ANSI_YELLOW = "\u001B[33m";
-    public static final String ANSI_BLUE = "\u001B[34m";
-    public static final String ANSI_PURPLE = "\u001B[35m";
-    public static final String ANSI_CYAN = "\u001B[36m";
-    public static final String ANSI_WHITE = "\u001B[37m";
+    private static final String ANSI_RESET = "\u001B[0m";
+    private static final String ANSI_BLACK = "\u001B[30m";
+    private static final String ANSI_RED = "\u001B[31m";
+    private static final String ANSI_GREEN = "\u001B[32m";
+    private static final String ANSI_YELLOW = "\u001B[33m";
+    private static final String ANSI_BLUE = "\u001B[34m";
+    private static final String ANSI_PURPLE = "\u001B[35m";
+    private static final String ANSI_CYAN = "\u001B[36m";
+    private static final String ANSI_WHITE = "\u001B[37m";
 
     private static final int WIDTH = 10;
     private static final int HEIGHT = 10;
@@ -86,7 +86,7 @@ public class MineSweeper {
             moves[line][row] = CELL_FLAG;
             return true;
         }
-        if (board[line][row] != MINE) {
+        if (!isMine(board[line][row])) {
             moves[line][row] = CELL_OPEN;
             return true;
         }
@@ -114,7 +114,7 @@ public class MineSweeper {
                 System.out.print(cellColor);
                 if (board[i][j] == EMPTY) {
                     System.out.print(" .");
-                } else if (board[i][j] == MINE) {
+                } else if (isMine(board[i][j])) {
                     System.out.print(" *");
                 } else {
                     System.out.printf("%2d", board[i][j]);
@@ -146,7 +146,13 @@ public class MineSweeper {
     }
 
     private static int[][] generateBoard() {
-        final int[][] board = new int[HEIGHT][WIDTH];
+        final int[][] board = fillMines();
+        calculateMines(board);
+        return board;
+    }
+
+    private static int[][] fillMines() {
+        int[][] board = new int[HEIGHT][WIDTH];
         int mines = MINES;
         final Random random = new Random();
         while (mines > 0) {
@@ -154,32 +160,41 @@ public class MineSweeper {
             do {
                 x = random.nextInt(HEIGHT);
                 y = random.nextInt(WIDTH);
-            } while (board[x][y] == MINE);
+            } while (isMine(board[x][y]));
             board[x][y] = MINE;
             mines--;
         }
+        return board;
+    }
 
+    private static void calculateMines(int[][] board) {
         for (int i = 0; i < HEIGHT; i++) {
             for (int j = 0; j < WIDTH; j++) {
-                if (board[i][j] == MINE) {
+                if (isMine(board[i][j])) {
                     continue;
                 }
-                int mCount = 0;
-                for (int k = i - 1; k <= i + 1; k++) {
-                    for (int l = j - 1; l <= j + 1; l++) {
-                        if (k < 0 || k >= HEIGHT || l < 0 || l >= WIDTH) {
-                            continue;
-                        }
-                        if (board[k][l] == MINE) {
-                            mCount++;
-                        }
-                    }
-                }
-                board[i][j] = mCount;
+                board[i][j] = getMinesCountAroundCell(board, i, j);
             }
         }
+    }
 
-        return board;
+    private static boolean isMine(int i) {
+        return i == MINE;
+    }
+
+    private static int getMinesCountAroundCell(int[][] board, int line, int row) {
+        int mCount = 0;
+        for (int i = line - 1; i <= line + 1; i++) {
+            for (int j = row - 1; j <= row + 1; j++) {
+                if (i < 0 || i >= HEIGHT || j < 0 || j >= WIDTH) {
+                    continue;
+                }
+                if (isMine(board[i][j])) {
+                    mCount++;
+                }
+            }
+        }
+        return mCount;
     }
 
 }
