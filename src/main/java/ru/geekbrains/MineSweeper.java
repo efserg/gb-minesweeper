@@ -17,7 +17,7 @@ public class MineSweeper {
 
     private static final int WIDTH = 10;
     private static final int HEIGHT = 10;
-    private static final int MINES = 25;
+    private static final int MINE_COUNT = 25;
 
     private static final int MINE = 1000;
     private static final int EMPTY = 0;
@@ -33,7 +33,6 @@ public class MineSweeper {
             System.out.println("БАБАХ!!!\nВы проиграли!");
         }
     }
-
 
     public static boolean play() {
         int[][] board = generateBoard();
@@ -57,40 +56,30 @@ public class MineSweeper {
                 }
             }
         }
-        return openCell + MINES == HEIGHT * WIDTH;
+        return openCell == HEIGHT * WIDTH - MINE_COUNT;
     }
 
     private static boolean move(final int[][] board, final int[][] moves) {
         final Scanner scanner = new Scanner(System.in);
         printBoard(board, moves);
-        int row, line;
-        boolean flag = false;
         while (true) {
             System.out.print("Ваш ход (строка, столбец, флаг, например А1*): ");
-            final String move = scanner.nextLine().toUpperCase();
-            if (move.length() == 2 || move.length() == 3) {
-                row = move.charAt(0) - 'A';
-                line = move.charAt(1) - '0';
-                if (move.length() > 2) {
-                    flag = move.charAt(2) == '*';
+            String s = scanner.nextLine().toUpperCase(); // приводим к верхнему регистру
+            int row = s.charAt(0) - 'A';
+            int line = s.charAt(1) - '0';
+            if (row >= 0 && row < HEIGHT && line >= 0 && line < WIDTH) {
+                if (s.endsWith("*")) {
+                    moves[line][row] = CELL_FLAG;
+                    return true;
                 }
-                if (row < WIDTH && row >= 0 && line < HEIGHT && line >= 0 && moves[line][row] == CELL_CLOSE) {
-                    break;
+                if (isMine(board[line][row])) {
+                    return false;
                 }
-                System.out.println(row + " " + line);
+                moves[line][row] = CELL_OPEN;
+                return true;
             }
             System.out.println("Неправильный ввод");
         }
-
-        if (flag) {
-            moves[line][row] = CELL_FLAG;
-            return true;
-        }
-        if (!isMine(board[line][row])) {
-            moves[line][row] = CELL_OPEN;
-            return true;
-        }
-        return false;
     }
 
     private static void printBoard(final int[][] board, final int[][] moves) {
@@ -107,7 +96,7 @@ public class MineSweeper {
                     continue;
                 }
                 if (moves[i][j] == CELL_FLAG) {
-                    System.out.print(" +");
+                    System.out.print(" P");
                     continue;
                 }
                 String cellColor = getColorCode(board[i][j]);
@@ -153,14 +142,13 @@ public class MineSweeper {
 
     private static int[][] fillMines() {
         int[][] board = new int[HEIGHT][WIDTH];
-        int mines = MINES;
+        int mines = MINE_COUNT;
         final Random random = new Random();
         while (mines > 0) {
-            int x, y;
-            do {
-                x = random.nextInt(HEIGHT);
-                y = random.nextInt(WIDTH);
-            } while (isMine(board[x][y]));
+            int x = random.nextInt(HEIGHT), y = random.nextInt(WIDTH);
+            if (isMine(board[x][y])) {
+                continue;
+            }
             board[x][y] = MINE;
             mines--;
         }
