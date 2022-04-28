@@ -17,7 +17,7 @@ public class GuiMineSweeper extends JFrame{
         super(title);
     }
 
-    public void ContentPaneReplace(int HEIGHT, int WIDTH, final int[][] board) {
+    public void ContentPaneReplace(int HEIGHT, int WIDTH, final int MINE, final int[][] board) {
 
         Object[][] array = new String[HEIGHT][WIDTH];
 
@@ -37,9 +37,19 @@ public class GuiMineSweeper extends JFrame{
                 int rows = table.getSelectedRows()[0];
                 int columns = table.getSelectedColumns()[0];
                 int value = board[rows][columns];
-                if (value == 1000) {
+                if (value == MINE) {
                     table.setValueAt("*", rows, columns);
                     JOptionPane.showMessageDialog(null, "Вы проиграли!");
+                    for (int i = 0; i < board.length; i++) {
+                        for (int j = 0; j < board[i].length; j++) {
+                            int val = board[i][j];
+                            if (val == MINE) {
+                                table.setValueAt("*", i, j);
+                            } else {
+                                table.setValueAt(val, i, j);
+                            }
+                        }
+                    }
                 } else {
                     table.setValueAt(value, rows, columns);
                 }
@@ -47,6 +57,7 @@ public class GuiMineSweeper extends JFrame{
                 System.out.println(board[rows][columns]);
             }
         });
+
 
         JPanel contents = new JPanel();
         contents.add(table);

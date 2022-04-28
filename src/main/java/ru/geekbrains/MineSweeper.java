@@ -66,7 +66,7 @@ public class MineSweeper {
         printBoard(board, moves);
 
         GuiMineSweeper gui = new GuiMineSweeper("Сапёр");
-        gui.ContentPaneReplace(HEIGHT, WIDTH, board);
+        gui.ContentPaneReplace(HEIGHT, WIDTH, MINE, board);
         while (true) {
             System.out.print("Ваш ход (строка, столбец, флаг, например А1*): ");
             String s = scanner.nextLine().toUpperCase(); // приводим к верхнему регистру
