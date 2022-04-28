@@ -1,19 +1,13 @@
 package ru.geekbrains;
 
-import sun.print.DialogOwner;
-
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import static javax.swing.JColorChooser.createDialog;
 
 public class GuiMineSweeper extends JFrame{
 
-    private int click;
 
     public GuiMineSweeper(String title) throws HeadlessException {
         super(title);
@@ -29,10 +23,9 @@ public class GuiMineSweeper extends JFrame{
         table.setRowSelectionAllowed(true);
         table.setShowGrid(true);
         table.setGridColor(Color.gray);
-        table.setCellSelectionEnabled(false);
 
-      //  ListSelectionModel selectionModel = table.getSelectionModel();
         table.addMouseListener(new MouseAdapter() {
+
             @Override
             public void mouseClicked(MouseEvent evt) {
 
@@ -55,8 +48,6 @@ public class GuiMineSweeper extends JFrame{
                 } else {
                     table.setValueAt(value, rows, columns);
                 }
-
-                System.out.println(board[rows][columns]);
             }
         });
 
