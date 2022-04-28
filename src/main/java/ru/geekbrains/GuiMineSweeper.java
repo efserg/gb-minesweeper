@@ -6,6 +6,8 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import static javax.swing.JColorChooser.createDialog;
 
@@ -23,16 +25,16 @@ public class GuiMineSweeper extends JFrame{
 
         final JTable table = new JTable(HEIGHT, WIDTH);
         table.setRowHeight(30);
-        table.setSelectionMode(0);
         table.setColumnSelectionAllowed(true);
         table.setRowSelectionAllowed(true);
         table.setShowGrid(true);
         table.setGridColor(Color.gray);
+        table.setCellSelectionEnabled(false);
 
-        ListSelectionModel selectionModel = table.getSelectionModel();
-        selectionModel.addListSelectionListener(new ListSelectionListener() {
+      //  ListSelectionModel selectionModel = table.getSelectionModel();
+        table.addMouseListener(new MouseAdapter() {
             @Override
-            public void valueChanged(ListSelectionEvent e) {
+            public void mouseClicked(MouseEvent evt) {
 
                 int rows = table.getSelectedRows()[0];
                 int columns = table.getSelectedColumns()[0];
