@@ -1,16 +1,23 @@
 package ru.geekbrains;
 
+import sun.print.DialogOwner;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 
+import static javax.swing.JColorChooser.createDialog;
+
 public class GuiMineSweeper extends JFrame{
+
+    private int click;
+
     public GuiMineSweeper(String title) throws HeadlessException {
         super(title);
     }
 
-    public void ContentPaneReplace(int HEIGHT, int WIDTH) {
+    public void ContentPaneReplace(int HEIGHT, int WIDTH, final int[][] board) {
 
         Object[][] array = new String[HEIGHT][WIDTH];
 
@@ -26,10 +33,18 @@ public class GuiMineSweeper extends JFrame{
         selectionModel.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
+
                 int rows = table.getSelectedRows()[0];
                 int columns = table.getSelectedColumns()[0];
-                System.out.println(rows);
-                System.out.println(columns);
+                int value = board[rows][columns];
+                if (value == 1000) {
+                    table.setValueAt("*", rows, columns);
+                    JOptionPane.showMessageDialog(null, "Вы проиграли!");
+                } else {
+                    table.setValueAt(value, rows, columns);
+                }
+
+                System.out.println(board[rows][columns]);
             }
         });
 

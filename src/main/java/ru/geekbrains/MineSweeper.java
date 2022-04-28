@@ -37,8 +37,6 @@ public class MineSweeper {
 
     public static boolean play() {
         int[][] board = generateBoard();
-        GuiMineSweeper gui = new GuiMineSweeper("Сапёр");
-        gui.ContentPaneReplace(HEIGHT, WIDTH);
         int[][] moves = new int[HEIGHT][WIDTH];
 
         boolean isPassMove;
@@ -66,6 +64,9 @@ public class MineSweeper {
     private static boolean move(final int[][] board, final int[][] moves) {
         final Scanner scanner = new Scanner(System.in);
         printBoard(board, moves);
+
+        GuiMineSweeper gui = new GuiMineSweeper("Сапёр");
+        gui.ContentPaneReplace(HEIGHT, WIDTH, board);
         while (true) {
             System.out.print("Ваш ход (строка, столбец, флаг, например А1*): ");
             String s = scanner.nextLine().toUpperCase(); // приводим к верхнему регистру
