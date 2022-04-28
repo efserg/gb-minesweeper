@@ -1,5 +1,6 @@
 package ru.geekbrains;
 
+import java.awt.*;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -36,7 +37,10 @@ public class MineSweeper {
 
     public static boolean play() {
         int[][] board = generateBoard();
+        GuiMineSweeper gui = new GuiMineSweeper("Сапёр");
+        gui.ContentPaneReplace(HEIGHT, WIDTH);
         int[][] moves = new int[HEIGHT][WIDTH];
+
         boolean isPassMove;
         boolean win;
         do {
