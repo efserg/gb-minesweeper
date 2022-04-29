@@ -1,8 +1,7 @@
 package ru.geekbrains;
 
-import sun.applet.Main;
-
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -26,7 +25,11 @@ public class GuiMineSweeper extends JFrame {
         final JButton buttonReset = new JButton("Сбросить");
         buttonReset.setVisible(false);
 
-        final JTable table = new JTable(HEIGHT, WIDTH);
+        final JTable table = new JTable(HEIGHT, WIDTH );
+        DefaultTableCellRenderer renderer = (DefaultTableCellRenderer)table.getDefaultRenderer(String.class);
+        renderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+        table.setFont(new Font (null, Font.BOLD, 14));
         table.setRowHeight(30);
         table.setColumnSelectionAllowed(true);
         table.setRowSelectionAllowed(true);
@@ -39,9 +42,11 @@ public class GuiMineSweeper extends JFrame {
             public void mousePressed(MouseEvent e) {
                 buttonNew.setVisible(true);
                 buttonReset.setVisible(true);
+
                 int rows = table.getSelectedRows()[0];
                 int columns = table.getSelectedColumns()[0];
                 int value = board[rows][columns];
+
                 if (value == MINE) {
                     table.setValueAt("*", rows, columns);
                     JOptionPane.showMessageDialog(null, "Вы проиграли!");
@@ -67,6 +72,7 @@ public class GuiMineSweeper extends JFrame {
             public void mousePressed(MouseEvent e) {
                 buttonNew.setVisible(false);
                 buttonReset.setVisible(false);
+
                 for (int i = 0; i < board.length; i++) {
                     for (int j = 0; j < board[i].length; j++) {
                         table.setValueAt("", i, j);
@@ -80,6 +86,7 @@ public class GuiMineSweeper extends JFrame {
             public void mousePressed(MouseEvent e) {
                 buttonNew.setVisible(false);
                 buttonReset.setVisible(false);
+
                 board = MineSweeper.generateBoard();
                 for (int i = 0; i < board.length; i++) {
                     for (int j = 0; j < board[i].length; j++) {
