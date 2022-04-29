@@ -25,11 +25,11 @@ public class GuiMineSweeper extends JFrame {
         final JButton buttonReset = new JButton("Сбросить");
         buttonReset.setVisible(false);
 
-        final JTable table = new JTable(HEIGHT, WIDTH );
-        DefaultTableCellRenderer renderer = (DefaultTableCellRenderer)table.getDefaultRenderer(String.class);
+        final JTable table = new JTable(HEIGHT, WIDTH);
+        DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) table.getDefaultRenderer(String.class);
         renderer.setHorizontalAlignment(SwingConstants.CENTER);
 
-        table.setFont(new Font (null, Font.BOLD, 14));
+        table.setFont(new Font(null, Font.BOLD, 14));
         table.setRowHeight(30);
         table.setColumnSelectionAllowed(true);
         table.setRowSelectionAllowed(true);
@@ -43,27 +43,40 @@ public class GuiMineSweeper extends JFrame {
                 buttonNew.setVisible(true);
                 buttonReset.setVisible(true);
 
-                int rows = table.getSelectedRows()[0];
-                int columns = table.getSelectedColumns()[0];
-                int value = board[rows][columns];
+                int column = table.columnAtPoint(e.getPoint());
+                int row = table.rowAtPoint(e.getPoint());
+                int value = board[row][column];
 
-                if (value == MINE) {
-                    table.setValueAt("*", rows, columns);
-                    JOptionPane.showMessageDialog(null, "Вы проиграли!");
-                    for (int i = 0; i < board.length; i++) {
-                        for (int j = 0; j < board[i].length; j++) {
-                            int val = board[i][j];
-                            if (val == MINE) {
-                                table.setValueAt("*", i, j);
-                            } else {
-                                table.setValueAt(val, i, j);
+                switch (e.getButton()) {
+                    case MouseEvent.BUTTON1:
+                        if (value == MINE) {
+                            table.setValueAt("*", row, column);
+
+                            JOptionPane.showMessageDialog(null, "Вы проиграли!");
+                            for (int i = 0; i < board.length; i++) {
+                                for (int j = 0; j < board[i].length; j++) {
+                                    int val = board[i][j];
+                                    if (val == MINE) {
+                                        table.setValueAt("*", i, j);
+                                    } else {
+                                        table.setValueAt(val, i, j);
+                                    }
+                                }
                             }
-                        }
-                    }
 
-                } else {
-                    table.setValueAt(value, rows, columns);
+                        } else {
+                            table.setValueAt(value, row, column);
+                        }
+                        break;
+                    case  MouseEvent.BUTTON3:
+
+                        table.setColumnSelectionInterval(column, column);
+                        table.setRowSelectionInterval(row, row);
+                        table.setValueAt("F", row, column);
+                        break;
                 }
+
+
             }
         });
 
