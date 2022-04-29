@@ -14,8 +14,10 @@ public class GuiMineSweeper extends JFrame{
     }
 
     public void ContentPaneReplace(int HEIGHT, int WIDTH, final int MINE, final int[][] board) {
-
-        Object[][] array = new String[HEIGHT][WIDTH];
+        final JButton buttonNew = new JButton("Новая игра");
+        buttonNew.setVisible(false);
+        final JButton buttonReset = new JButton("Сбросить");
+        buttonReset.setVisible(false);
 
         final JTable table = new JTable(HEIGHT, WIDTH);
         table.setRowHeight(30);
@@ -28,7 +30,8 @@ public class GuiMineSweeper extends JFrame{
 
             @Override
             public void mouseClicked(MouseEvent evt) {
-
+                buttonNew.setVisible(true);
+                buttonReset.setVisible(true);
                 int rows = table.getSelectedRows()[0];
                 int columns = table.getSelectedColumns()[0];
                 int value = board[rows][columns];
@@ -45,15 +48,30 @@ public class GuiMineSweeper extends JFrame{
                             }
                         }
                     }
+
                 } else {
                     table.setValueAt(value, rows, columns);
                 }
             }
         });
 
+        buttonReset.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                buttonNew.setVisible(false);
+                buttonReset.setVisible(false);
+                for (int i = 0; i < board.length; i++) {
+                    for (int j = 0; j < board[i].length; j++) {
+                        table.setValueAt("", i, j);
+                    }
+                }
+            }
+        });
 
         JPanel contents = new JPanel();
         contents.add(table);
+        contents.add(buttonNew);
+        contents.add(buttonReset);
 
         setContentPane(contents);
 
