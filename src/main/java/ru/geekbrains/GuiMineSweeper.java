@@ -36,7 +36,7 @@ public class GuiMineSweeper extends JFrame {
         table.addMouseListener(new MouseAdapter() {
 
             @Override
-            public void mouseClicked(MouseEvent evt) {
+            public void mousePressed(MouseEvent e) {
                 buttonNew.setVisible(true);
                 buttonReset.setVisible(true);
                 int rows = table.getSelectedRows()[0];
@@ -64,7 +64,7 @@ public class GuiMineSweeper extends JFrame {
 
         buttonReset.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent evt) {
+            public void mousePressed(MouseEvent e) {
                 buttonNew.setVisible(false);
                 buttonReset.setVisible(false);
                 for (int i = 0; i < board.length; i++) {
@@ -77,7 +77,7 @@ public class GuiMineSweeper extends JFrame {
 
         buttonNew.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent evt) {
+            public void mousePressed(MouseEvent e) {
                 buttonNew.setVisible(false);
                 buttonReset.setVisible(false);
                 board = MineSweeper.generateBoard();
