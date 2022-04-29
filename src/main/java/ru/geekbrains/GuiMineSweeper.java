@@ -1,19 +1,26 @@
 package ru.geekbrains;
 
+import sun.applet.Main;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 
-public class GuiMineSweeper extends JFrame{
+public class GuiMineSweeper extends JFrame {
 
+    private int[][] board;
+
+    public void setBoard(int[][] board) {
+        this.board = board;
+    }
 
     public GuiMineSweeper(String title) throws HeadlessException {
         super(title);
     }
 
-    public void ContentPaneReplace(int HEIGHT, int WIDTH, final int MINE, final int[][] board) {
+    public void ContentPaneReplace(int HEIGHT, int WIDTH, final int MINE) {
         final JButton buttonNew = new JButton("Новая игра");
         buttonNew.setVisible(false);
         final JButton buttonReset = new JButton("Сбросить");
@@ -60,6 +67,20 @@ public class GuiMineSweeper extends JFrame{
             public void mouseClicked(MouseEvent evt) {
                 buttonNew.setVisible(false);
                 buttonReset.setVisible(false);
+                for (int i = 0; i < board.length; i++) {
+                    for (int j = 0; j < board[i].length; j++) {
+                        table.setValueAt("", i, j);
+                    }
+                }
+            }
+        });
+
+        buttonNew.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                buttonNew.setVisible(false);
+                buttonReset.setVisible(false);
+                board = MineSweeper.generateBoard();
                 for (int i = 0; i < board.length; i++) {
                     for (int j = 0; j < board[i].length; j++) {
                         table.setValueAt("", i, j);

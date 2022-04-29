@@ -39,6 +39,10 @@ public class MineSweeper {
         int[][] board = generateBoard();
         int[][] moves = new int[HEIGHT][WIDTH];
 
+        GuiMineSweeper gui = new GuiMineSweeper("Сапёр");
+        gui.setBoard(board);
+        gui.ContentPaneReplace(HEIGHT, WIDTH, MINE);
+
         boolean isPassMove;
         boolean win;
         do {
@@ -65,8 +69,6 @@ public class MineSweeper {
         final Scanner scanner = new Scanner(System.in);
         printBoard(board, moves);
 
-        GuiMineSweeper gui = new GuiMineSweeper("Сапёр");
-        gui.ContentPaneReplace(HEIGHT, WIDTH, MINE, board);
         while (true) {
             System.out.print("Ваш ход (строка, столбец, флаг, например А1*): ");
             String s = scanner.nextLine().toUpperCase(); // приводим к верхнему регистру
@@ -139,7 +141,7 @@ public class MineSweeper {
         return null;
     }
 
-    private static int[][] generateBoard() {
+    public static int[][] generateBoard() {
         final int[][] board = fillMines();
         calculateMines(board);
         return board;
